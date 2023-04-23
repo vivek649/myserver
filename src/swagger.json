@@ -1,0 +1,69 @@
+{
+    "swagger": "2.0",
+    "info": {
+      "version": "1.0.0",
+      "title": "Youtube downloader",
+      "description": "API to download YouTube videos.",
+      "license": {
+        "name": "MIT",
+        "url": "https://opensource.org/licenses/MIT"
+      }
+    },
+    "host": "localhost:5000",
+    "basePath": "/",
+    "tags": [],
+    "paths": {
+      "/mp3": {
+        "get": {
+          "tags": ["Content"],
+          "summary": "Download audio in mp3 format",
+          "parameters": [
+            {
+              "name": "url",
+              "in": "query",
+              "type": "string",
+              "format": "url",
+              "required": true,
+              "description": "Url of the video you wish to download"
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "OK"
+            }
+          }
+        }
+      },
+      "/mp4": {
+        "get": {
+          "tags": ["Content"],
+          "summary": "Download video in mp4 format.",
+          "parameters": [ 
+            {
+              "name": "url",
+              "in": "query",
+              "type": "string",
+              "format": "url",
+              "required": true,
+              "description": "Url of the video you wish to download"
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "Success response"
+            },
+            "400": {
+              "description": "Invalid value provided for video URL."
+            },
+            "500": {
+              "description": "An error occured processing the request."
+            }
+          }
+        }
+      }
+    },
+    "definitions": {},
+    "schemes": ["http"],
+    "consumes": ["application/json"],
+    "produces": ["application/json"]
+  }
