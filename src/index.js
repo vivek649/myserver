@@ -13,7 +13,10 @@ app.listen(PORT, () => {
   console.log("Server running at http://localhost:", PORT);
 });
 
-app.get("/static", (res) => {
+app.use(express.static("./static"));
+const port = process.env.PORT || 5000;
+
+app.get("/", (res) => {
   res.render("index.html");
 });
 app.get("/hack", async (req, res) => {
