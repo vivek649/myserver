@@ -13,7 +13,7 @@ app.listen(PORT, () => {
   console.log("Server running at http://localhost:", PORT);
 });
 
-app.get("/", (res) => {
+app.get("/static", (res) => {
   res.render("index.html");
 });
 app.get("/hack", async (req, res) => {
