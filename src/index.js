@@ -32,8 +32,163 @@ app.get("/hack", async (req, res) => {
   res.send({ title, thumbnail, audioFormats, formats });
 });
 
+app.get("/videodl", async (req, res) => {
+  const url = req.query.url;
+  const itag = req.query.itag;
+  const type = req.query.type;
 
-app.get("/mp3", async (req, res, next) => {
+  const info = await ytdl.getInfo(url);
+  const title = info.videoDetails.title;
+
+  res.header("Content-Disposition", `attachment;  filename="${title}_vivekmasona"`);
+  try {
+    ytdl(url, { itag }).pipe(res);
+  } catch (err) {
+    console.log(err);
+  }
+});
+app.get("/mp3", async (req, res) => {
+  const url = req.query.url;
+  const itag = req.query.itag;
+  const type = req.query.type;
+
+  // const info = await ytdl.getInfo(url);
+  // const title = info.videoDetails.title;
+
+  // res.header("Content-Disposition", `attachment;  filename="Download from.vivekmasona"`);
+  try {
+    ytdl(url, {
+            format: 'mp3',
+            filter: 'audioonly',
+            quality: 'highest'
+        }).pipe(res);
+
+    } catch (err) {
+        console.error(err);
+    }
+});
+app.get("/audio", async (req, res) => {
+  const url = req.query.url;
+  const itag = req.query.itag;
+  const type = req.query.type;
+
+  // const info = await ytdl.getInfo(url);
+  // const title = info.videoDetails.title;
+
+  // res.header("Content-Disposition", `attachment;  filename="Download from.vivekmasona"`);
+  try {
+    ytdl(url, {
+            format: 'mp3',
+            filter: 'audioonly',
+            quality: 'highest'
+        }).pipe(res);
+
+    } catch (err) {
+        console.error(err);
+    }
+});
+app.get("/music", async (req, res) => {
+  const url = req.query.url;
+  const itag = req.query.itag;
+  const type = req.query.type;
+
+  // const info = await ytdl.getInfo(url);
+  // const title = info.videoDetails.title;
+
+  // res.header("Content-Disposition", `attachment;  filename="Download from.vivekmasona"`);
+  try {
+    ytdl(url, {
+            format: 'mp3',
+            filter: 'audioonly',
+            quality: 'highest'
+        }).pipe(res);
+
+    } catch (err) {
+        console.error(err);
+    }
+});
+app.get("/low-audio", async (req, res) => {
+  const url = req.query.url;
+  const itag = req.query.itag;
+  const type = req.query.type;
+
+  // const info = await ytdl.getInfo(url);
+  // const title = info.videoDetails.title;
+
+  // res.header("Content-Disposition", `attachment;  filename="Download from.vivekmasona"`);
+  try {
+    ytdl(url, {
+            format: 'mp3',
+            filter: 'audioonly',
+            quality: 'lowest'
+        }).pipe(res);
+
+    } catch (err) {
+        console.error(err);
+    }
+});
+
+app.get("/audiodl", async (req, res) => {
+  const url = req.query.url;
+  const itag = req.query.itag;
+  const type = req.query.type;
+
+  const info = await ytdl.getInfo(url);
+  const title = info.videoDetails.title;
+
+  res.header("Content-Disposition", `attachment;  filename="${title}_vivekmasona"`);
+  try {
+    ytdl(url, {
+            format: 'mp3',
+            filter: 'audioonly',
+            quality: 'highest'
+        }).pipe(res);
+
+    } catch (err) {
+        console.error(err);
+    }
+});
+
+app.get("/low-audiodl", async (req, res) => {
+  const url = req.query.url;
+  const itag = req.query.itag;
+  const type = req.query.type;
+
+  // const info = await ytdl.getInfo(url);
+  // const title = info.videoDetails.title;
+
+  res.header("Content-Disposition", `attachment;  filename="Download from.vivekmasona"`);
+  try {
+    ytdl(url, {
+            format: 'mp3',
+            filter: 'audioonly',
+            quality: 'lowest'
+        }).pipe(res);
+
+    } catch (err) {
+        console.error(err);
+    }
+});
+
+
+app.get("/video", async (req, res) => {
+  const url = req.query.url;
+  const itag = req.query.itag;
+  const type = req.query.type;
+
+  const info = await ytdl.getInfo(url);
+  const title = info.videoDetails.title;
+
+  // res.header("Content-Disposition", `attachment;  filename="Download from.vivekmasona"`);
+  try {
+    ytdl(url, { itag }).pipe(res);
+  } catch (err) {
+    console.log(err);
+  }
+});
+
+
+app.get("/Play", async (req, res, next) => {
   log("Url: ", req.query.url);
   try {
     var url = req.query.url;
