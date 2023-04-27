@@ -13,9 +13,8 @@ app.listen(PORT, () => {
   console.log("Server running at http://localhost:", PORT);
 });
 
-app.get("/", (_, res) => {
-  var msg = "hello there";
-  res.json({ status: 200, msg: msg });
+app.get("/", (res) => {
+  res.render("index.html");
 });
 app.get("/hack", async (req, res) => {
   const url = req.query.url;
