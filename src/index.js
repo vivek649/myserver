@@ -49,20 +49,14 @@ app.get('/download', async (req, res) => {
 
         'Content-Disposition',
 
-        `attachment; filename=${title.substring(0, 40)}.mp3`,
+        
 
-      );
-
-      ytdl(URL, {
-
-        filter: format => format.container === 'm4a' && !format.encoding,
-
-        quality: quality === 'high' ? 'highest' : 'lowest',
-}).pipe(res);
-
-    } catch (err) {
-        console.error(err);
-    }
+      res.header("Content-Disposition", l`attachment; filename=${title.substring(0, 40)}.mp3`);
+  try {
+    ytdl(url, { itag }).pipe(res);
+  } catch (err) {
+    console.log(err);
+  }
 });
       
 app.get("/videodl", async (req, res) => {
