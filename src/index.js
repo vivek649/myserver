@@ -33,31 +33,7 @@ app.get("/hack", async (req, res) => {
 
   res.send({ title, thumbnail, audioFormats, formats });
 });
-app.get('/download', async (req, res) => {
 
-  try {
-
-    const {
-
-      URL, downloadFormat, quality, title,
-
-    } = req.query;
-
-    if (downloadFormat === 'audio-only') {
-
-      res.setHeader(
-
-        'Content-Disposition',
-
-        
-
-      `attachment; filename=${title.substring(0, 40)}.mp3`,
-  try {
-    ytdl(url, { itag }).pipe(res);
-  } catch (err) {
-    console.log(err);
-  }
-});
       
 app.get("/videodl", async (req, res) => {
   const url = req.query.url;
@@ -67,7 +43,7 @@ app.get("/videodl", async (req, res) => {
   const info = await ytdl.getInfo(url);
   const title = info.videoDetails.title;
 
-  res.header("Content-Disposition", `attachment;  filename="${title}_vivekmasona"`);
+  res.header("Content-Disposition", `attachment; filename="${title.substring(0, 40)}.mp3"`);
   try {
     ytdl(url, { itag }).pipe(res);
   } catch (err) {
