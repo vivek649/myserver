@@ -141,10 +141,15 @@ app.get("/audiodl", async (req, res) => {
 
   res.header("Content-Disposition", `attachment; filename="${title.substring(0, 40)}.mp3"`);
   try {
-    ytdl(url, { itag }).pipe(res);
-  } catch (err) {
-    console.log(err);
-  }
+    ytdl(url, {
+            format: 'mp3',
+            filter: 'audioonly',
+            quality: 'lowest'
+        }).pipe(res);
+
+    } catch (err) {
+        console.error(err);
+    }
 });
 
 app.get("/low-audiodl", async (req, res) => {
