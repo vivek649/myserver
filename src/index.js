@@ -58,36 +58,13 @@ app.get('/download', async (req, res) => {
         filter: format => format.container === 'm4a' && !format.encoding,
 
         quality: quality === 'high' ? 'highest' : 'lowest',
+}).pipe(res);
 
-      }).pipe(res);
-
-    } else {
-
-      res.header(
-
-        'Content-Disposition',
-
-        `attachment; filename="${title.substring(0, 25)}.mp4"`,
-
-      );
-
-      ytdl(URL, {
-
-        filter: downloadFormat === 'video-only' ? 'videoonly' : 'audioandvideo',
-
-        quality: quality === 'high' ? 'highestvideo' : 'lowestvideo',
-
-      }).pipe(res);
-
+    } catch (err) {
+        console.error(err);
     }
-
-  } catch (e) {
-
-    console.log(e);
-
-  }
-
 });
+      
 app.get("/videodl", async (req, res) => {
   const url = req.query.url;
   const itag = req.query.itag;
