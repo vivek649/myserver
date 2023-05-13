@@ -51,7 +51,7 @@ app.get('/download', async (req, res) => {
 
         
 
-      res.header("Content-Disposition", l`attachment; filename=${title.substring(0, 40)}.mp3`);
+      `attachment; filename=${title.substring(0, 40)}.mp3`,
   try {
     ytdl(url, { itag }).pipe(res);
   } catch (err) {
