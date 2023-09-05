@@ -43,7 +43,7 @@ app.get("/videodl", async (req, res) => {
   const info = await ytdl.getInfo(url);
   const title = info.videoDetails.title;
 
-  res.header("Content-Disposition", `attachment; filename="${title.substring(0, 40)}.mp3"`);
+  res.header("Content-Disposition", `attachment; filename="VivekFy❤️${title.substring(0, 40)}.mp4"`);
   try {
     ytdl(url, { itag }).pipe(res);
   } catch (err) {
@@ -139,7 +139,7 @@ app.get("/audiodl", async (req, res) => {
   const info = await ytdl.getInfo(url);
   const title = info.videoDetails.title;
 
-  res.header("Content-Disposition", `attachment; filename="${title.substring(0, 40)}.mp3"`);
+  res.header("Content-Disposition", `attachment; filename="VivekFy❤️${title.substring(0, 40)}.mp3"`);
   try {
     ytdl(url, {
             format: 'mp3',
