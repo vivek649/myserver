@@ -3,7 +3,7 @@ const cors = require("cors");
 const ytdl = require("ytdl-core");
 const swaggerUi = require("swagger-ui-express");
 const swaggerDocument = require("./swagger.json");
-
+const port = 3000;
 const PORT = process.env.PORT || 5000;
 const app = express();
 app.use("/swagger", swaggerUi.serve, swaggerUi.setup(swaggerDocument));
@@ -269,7 +269,41 @@ app.get("/mp4", async (req, res, next) => {
     });
   }
 });
+//const express = require('express');
+//const ytdl = require('ytdl-core');
+//const app = express();
+//const port = 3000;
+
+app.get('/api', async (req, res) => {
+  try {
+    const videoURL = req.query.url; // Get the YouTube video URL from the query parameter
+    if (!videoURL) {
+      return res.status(400).send('Missing video URL');
+    }
+
+    // Set response headers to specify a downloadable file
+    res.header("Content-Disposition", `attachment; filename="${title}.mp3"`);
+    //res.setHeader('Content-Disposition', 'attachment; filename="audio.mp3"');
+    res.setHeader('Content-Type', 'audio/mpeg');
+
+    // Pipe the video stream into the response
+    ytdl(videoURL, { filter: 'audioonly' }).pipe(res);
+  } catch (error) {
+    console.error('Error:', error);
+    res.status(500).send('Internal Server Error');
+  }
+});
+
+//app.listen(port, () => {
+  //console.log(`Server is running on port ${port}`);
+//});
+
+
+
 
 const log = (...msg) => {
   console.log(msg);
 };
+
+
+      
