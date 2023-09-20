@@ -3,7 +3,7 @@ const cors = require("cors");
 const ytdl = require("ytdl-core");
 const swaggerUi = require("swagger-ui-express");
 const swaggerDocument = require("./swagger.json");
-const port = 3000;
+//const port = 3000;
 const PORT = process.env.PORT || 5000;
 const app = express();
 app.use("/swagger", swaggerUi.serve, swaggerUi.setup(swaggerDocument));
@@ -95,16 +95,15 @@ app.get("/music", async (req, res) => {
   const itag = req.query.itag;
   const type = req.query.type;
 
-  // const info = await ytdl.getInfo(url);
-  // const title = info.videoDetails.title;
+  const info = await ytdl.getInfo(url);
+  const title = info.videoDetails.title;
 
-  // res.header("Content-Disposition", `attachment;  filename="Download from.vivekmasona"`);
+  res.header("Content-Disposition", `attachment;  filename="Download from.vivekmasona"`);
   try {
-    ytdl(url, {
-            format: 'mp3',
-            filter: 'audioonly',
-            quality: 'highest'
-        }).pipe(res);
+    const videoURL = req.query.url; // Get the YouTube video URL from the query parameter
+    if (!videoURL) {
+      return res.status(400).send('Missing video URL');
+    }
 
     } catch (err) {
         console.error(err);
