@@ -84,7 +84,7 @@ app.get("/audio", async (req, res) => {
 
   const info = await ytdl.getInfo(url);
   const title = info.videoDetails.title;
-res.header("Content-Disposition", `attachment; filename="VivekFy❤️${title.substring(0, 40)}.mp4"`);
+res.header("Content-Disposition", `attachment; filename="VivekFy❤️${title}.mp4"`);
   //res.header("Content-Disposition", `attachment;  filename="Download from.vivekmasona"`);
   try {
     ytdl(url, {
