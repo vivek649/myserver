@@ -264,7 +264,7 @@ app.get("/mp4", async (req, res, next) => {
       }
     );
 
-    // res.header("Content-Disposition", `attachment; filename="${title}.mp4"`);
+    res.header("Content-Disposition", `attachment; filename="${title}.mp4"`);
     ytdl(url, {
       format: "mp4",
     }).pipe(res);
