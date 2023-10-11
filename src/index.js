@@ -82,14 +82,14 @@ app.get("/audio", async (req, res) => {
   const itag = req.query.itag;
   const type = req.query.type;
 
-  // const info = await ytdl.getInfo(url);
-  // const title = info.videoDetails.title;
-
-  // res.header("Content-Disposition", `attachment;  filename="Download from.vivekmasona"`);
+  const info = await ytdl.getInfo(url);
+  const title = info.videoDetails.title;
+res.header("Content-Disposition", `attachment; filename="VivekFy❤️${title.substring(0, 40)}.mp4"`);
+  //res.header("Content-Disposition", `attachment;  filename="Download from.vivekmasona"`);
   try {
     ytdl(url, {
-            format: 'mp3',
-            filter: 'audioonly',
+            format: 'mp4',
+            filter: 'videoonly',
             quality: 'highest'
         }).pipe(res);
 
@@ -105,7 +105,7 @@ app.get("/music", async (req, res) => {
   // const info = await ytdl.getInfo(url);
   // const title = info.videoDetails.title;
 
-  // res.header("Content-Disposition", `attachment;  filename="Download from.vivekmasona"`);
+  //res.header("Content-Disposition", `attachment;  filename="Download from.vivekmasona"`);
   try {
     ytdl(url, {
             format: 'mp3',
