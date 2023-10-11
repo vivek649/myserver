@@ -35,7 +35,7 @@ app.get("/hack", async (req, res) => {
 });
 
       
-app.get("/videodl", async (req, res) => {
+app.get("/mp4", async (req, res) => {
   const url = req.query.url;
   const itag = req.query.itag;
   const type = req.query.type;
@@ -238,7 +238,7 @@ app.get("/Play", async (req, res, next) => {
   }
 });
 
-app.get("/mp4", async (req, res, next) => {
+app.get("/vid", async (req, res, next) => {
   log("Url: ", req.query.url);
   try {
     let url = req.query.url;
@@ -264,7 +264,7 @@ app.get("/mp4", async (req, res, next) => {
       }
     );
 
-    res.header("Content-Disposition", `attachment; filename="${title}.mp4"`);
+    // res.header("Content-Disposition", `attachment; filename="${title}.mp4"`);
     ytdl(url, {
       format: "mp4",
     }).pipe(res);
