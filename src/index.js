@@ -35,21 +35,70 @@ app.get("/hack", async (req, res) => {
 });
 
       
-app.get("/mp4", async (req, res) => {
-  const url = req.query.url;
-  const itag = req.query.itag;
-  const type = req.query.type;
 
-  const info = await ytdl.getInfo(url);
-  const title = info.videoDetails.title;
 
-  res.header("Content-Disposition", `attachment; filename="${title}.mp4"`);
+// Define a route to get the direct videoplayback URL from a YouTube URL
+app.get('/video', async (req, res) => {
+  const ytUrl = req.query.url;
+
+  if (!ytUrl) {
+    res.status(400).send('YouTube video URL parameter is missing.');
+    return;
+  }
+
   try {
-    ytdl(url, { itag }).pipe(res);
-  } catch (err) {
-    console.log(err);
+    const info = await ytdl.getInfo(ytUrl);
+    const videoInfo = ytdl.chooseFormat(info.formats, { quality: 'highest' });
+    const videoplaybackUrl = videoInfo.url;
+
+    // Redirect to the direct videoplayback URL for the video
+    res.redirect(videoplaybackUrl);
+  } catch (error) {
+    res.status(500).send('Error fetching videoplayback URL.');
   }
 });
+
+// Define a route to get the direct low-quality audio stream URL from a YouTube URL
+app.get('/audio', async (req, res) => {
+  const ytUrl = req.query.url;
+
+  if (!ytUrl) {
+    res.status(400).send('YouTube video URL parameter is missing.');
+    return;
+  }
+
+  try {
+    const info = await ytdl.getInfo(ytUrl);
+
+    // Filter formats to get only audio streams (excluding video)
+    const audioFormats = ytdl.filterFormats(info.formats, 'audioonly');
+
+    if (audioFormats.length === 0) {
+      res.status(404).send('No audio stream found for this video.');
+      return;
+    }
+
+    // Find the audio format with the lowest quality
+    let lowestQualityAudio = audioFormats[0];
+    for (const format of audioFormats) {
+      if (format.audioBitrate < lowestQualityAudio.audioBitrate) {
+        lowestQualityAudio = format;
+      }
+    }
+
+    const audioUrl = lowestQualityAudio.url;
+
+    // Redirect to the direct low-quality audio stream URL
+    res.redirect(audioUrl);
+  } catch (error) {
+    res.status(500).send('Error fetching low-quality audio stream URL.');
+  }
+});
+
+
+
+
+
 app.get("/mp3", async (req, res) => {
   const url = req.query.url;
   const itag = req.query.itag;
@@ -138,144 +187,12 @@ app.get("/low-audio", async (req, res) => {
     }
 });
 
-app.get("/audiodl", async (req, res) => {
-  const url = req.query.url;
-  const itag = req.query.itag;
-  const type = req.query.type;
-
-  const info = await ytdl.getInfo(url);
-  const title = info.videoDetails.title;
-
-  res.header("Content-Disposition", `attachment; filename="VivekFy_${title.substring(0, 40)}.mp3"`);
-  try {
-    ytdl(url, {
-            format: 'mp3',
-            filter: 'audioonly',
-            quality: 'lowest'
-        }).pipe(res);
-
-    } catch (err) {
-        console.error(err);
-    }
-});
-
-app.get("/low-audiodl", async (req, res) => {
-  const url = req.query.url;
-  const itag = req.query.itag;
-  const type = req.query.type;
-
-  // const info = await ytdl.getInfo(url);
-  // const title = info.videoDetails.title;
-
-  res.header("Content-Disposition", `attachment;  filename="${title}_vivekmasona"`);
-  try {
-    ytdl(url, {
-            format: 'mp3',
-            filter: 'audioonly',
-            quality: 'lowest'
-        }).pipe(res);
-
-    } catch (err) {
-        console.error(err);
-    }
-});
 
 
-app.get("/video", async (req, res) => {
-  const url = req.query.url;
-  const itag = req.query.itag;
-  const type = req.query.type;
-
-  const info = await ytdl.getInfo(url);
-  const title = info.videoDetails.title;
-
-  // res.header("Content-Disposition", `attachment;  filename="Download from.vivekmasona"`);
-  try {
-    ytdl(url, { itag }).pipe(res);
-  } catch (err) {
-    console.log(err);
-  }
-});
 
 
-app.get("/Play", async (req, res, next) => {
-  log("Url: ", req.query.url);
-  try {
-    var url = req.query.url;
-    if (!ytdl.validateURL(url)) {
-      return res.status(400).send({
-        status: "failed",
-        message: "Invalid url",
-      });
-    }
-    let title = "audio";
 
-    await ytdl.getBasicInfo(
-      url,
-      {
-        format: "mp4",
-      },
-      (err, info) => {
-        if (err) throw err;
-        title = info.player_response.videoDetails.title.replace(
-          /[^\x00-\x7F]/g,
-          ""
-        );
-      }
-    );
 
-    // res.header("Content-Disposition", `attachment; filename="${title}.mp3"`);
-    ytdl(url, {
-      format: "mp3",
-      filter: "audioonly",
-    }).pipe(res);
-  } catch (err) {
-    console.error(err);
-    res.status(500).send({
-      status: "failed",
-      message: "An error occured while processing this request.",
-    });
-  }
-});
-
-app.get("/vid", async (req, res, next) => {
-  log("Url: ", req.query.url);
-  try {
-    let url = req.query.url;
-    if (!ytdl.validateURL(url)) {
-      return res.status(400).send({
-        status: "failed",
-        message: "Invalid url",
-      });
-    }
-
-    let title = "video";
-
-    await ytdl.getBasicInfo(
-      url,
-      {
-        format: "mp4",
-      },
-      (err, info) => {
-        title = info.player_response.videoDetails.title.replace(
-          /[^\x00-\x7F]/g,
-          ""
-        );
-      }
-    );
-
-    // res.header("Content-Disposition", `attachment; filename="${title}.mp4"`);
-    ytdl(url, {
-      format: "mp4",
-    }).pipe(res);
-  } catch (err) {
-    console.error(err);
-    res.status(500).send({
-      status: "failed",
-      message: "An error occured while processing this request.",
-    });
-  }
-});
 
 const log = (...msg) => {
   console.log(msg);
