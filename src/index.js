@@ -97,6 +97,46 @@ app.get('/audio', async (req, res) => {
 
 
 
+app.get('/fast', async (req, res) => {
+  const ytUrl = req.query.url;
+
+  if (!ytUrl) {
+    res.status(400).send('YouTube video URL parameter is missing.');
+    return;
+  }
+
+  try {
+    const info = await ytdl.getInfo(ytUrl);
+
+    // Filter formats to get only audio streams (excluding video)
+    const audioFormats = ytdl.filterFormats(info.formats, 'audioonly');
+
+    if (audioFormats.length === 0) {
+      res.status(404).send('No audio stream found for this video.');
+      return;
+    }
+
+    // Find the audio format with the desired bitrate (32kbps)
+    const desiredAudioFormat = audioFormats.find(format => format.audioBitrate === 32);
+
+    if (!desiredAudioFormat) {
+      res.status(404).send('No audio stream with the specified bitrate found for this video.');
+      return;
+    }
+
+    const audioUrl = desiredAudioFormat.url;
+
+    // Redirect to the direct audio stream URL with the desired bitrate
+    res.redirect(audioUrl);
+  } catch (error) {
+    res.status(500).send('Error fetching audio stream URL.');
+  }
+});
+
+
+
+
+
 
 
 app.get("/mp3", async (req, res) => {
