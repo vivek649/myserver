@@ -96,7 +96,6 @@ app.get('/audio', async (req, res) => {
 });
 
 
-
 app.get('/fast', async (req, res) => {
   const ytUrl = req.query.url;
 
@@ -116,8 +115,14 @@ app.get('/fast', async (req, res) => {
       return;
     }
 
-    // Find the audio format with the desired bitrate (32kbps)
-    const desiredAudioFormat = audioFormats.find(format => format.audioBitrate === 32);
+    // Find the audio format with the desired bitrate (e.g., 50kbps)
+    let desiredAudioFormat = null;
+    for (const format of audioFormats) {
+      if (format.audioBitrate <= 50) {
+        desiredAudioFormat = format;
+        break;
+      }
+    }
 
     if (!desiredAudioFormat) {
       res.status(404).send('No audio stream with the specified bitrate found for this video.');
@@ -132,6 +137,7 @@ app.get('/fast', async (req, res) => {
     res.status(500).send('Error fetching audio stream URL.');
   }
 });
+
 
 
 
